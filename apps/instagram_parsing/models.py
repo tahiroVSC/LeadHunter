@@ -19,3 +19,7 @@ class InstagramComment(models.Model):
     text = models.TextField()
     date = models.DateTimeField()
     user_profile = models.CharField(max_length=255)
+
+
+class InstaParsRequest(models.Model):
+    username =  models.CharField( max_length= 255)

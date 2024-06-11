@@ -35,9 +35,6 @@ class ResetPasswordEmailRequestSerializer(serializers.Serializer):
 class SetNewPasswordSerializer(serializers.Serializer):
     password = serializers.CharField(min_length=6, max_length=68, write_only=True)
     confirm_password = serializers.CharField(min_length=6, max_length=68, write_only=True)
-    token = serializers.CharField(min_length=1, write_only=True)
-    uidb64 = serializers.CharField(min_length=1, write_only=True)
-
     def validate(self, attrs):
         if attrs['password'] != attrs['confirm_password']:
             raise serializers.ValidationError("Passwords do not match.")

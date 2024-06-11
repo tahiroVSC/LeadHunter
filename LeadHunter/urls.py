@@ -20,7 +20,7 @@ from .drf_yasg import urlpatterns as urls_swagger
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/v1/', include('apps.users.urls')),
-    path('api/v1/', include('apps.profiles.urls')),
+    path('api/v1/users/', include('apps.users.urls')),
+    path('api/v1/profiles/', include('apps.profiles.urls')),
     path('api/v1/instagram/', include('apps.instagram_parsing.urls'))
 ]   + urls_swagger

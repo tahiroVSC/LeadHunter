@@ -8,7 +8,6 @@ from django.core.mail import send_mail
 from django.urls import reverse
 from django.contrib.sites.shortcuts import get_current_site
 from rest_framework_simplejwt.tokens import RefreshToken
-from django.views.decorators.http import require_http_methods
 
 from .models import CustomUser
 from .serializers import RegisterSerializer, LoginSerializer, ResetPasswordEmailRequestSerializer, SetNewPasswordSerializer, EmailVerificationSerializer
@@ -105,7 +104,7 @@ class ResetPasswordConfirm(APIView):
                 uid = force_str(urlsafe_base64_decode(uidb64))
                 user = CustomUser.objects.get(pk=uid)
             except (TypeError, ValueError, OverflowError, CustomUser.DoesNotExist):
-                user = None
+                return Response({'error': 'Invalid token or user does not exist'}, status=status.HTTP_400_BAD_REQUEST)
 
             if user is not None and default_token_generator.check_token(user, token):
                 user.set_password(serializer.validated_data['password'])

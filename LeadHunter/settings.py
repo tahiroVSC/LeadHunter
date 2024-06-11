@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 
 from pathlib import Path
 from datetime import timedelta
+from celery.schedules import crontab
 
 
 import os
@@ -188,19 +189,12 @@ EMAIL_HOST_USER = 'a7740915@gmail.com'
 EMAIL_HOST_PASSWORD = 'govm ypjg mekr hfbq'  # Используйте пароль приложения
 DEFAULT_FROM_EMAIL = 'a7740915@gmail.com'
 
-INSTAGRAM_USERNAME = 'instaloader224'
-INSTAGRAM_PASSWORD = 'Abu20075'
+
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 
-CELERY_BROKER_URL = 'redis://localhost:6379/0'  # или другой брокер, который вы используете
-CELERY_BEAT_SCHEDULE = {
-    'parse_instagram_profiles_every_5_minutes': {
-        'task': 'instagram_app.tasks.parse_instagram_profiles_task',
-        'schedule': 300,  # каждые 5 минут
-    },
-}
+# LeadHunter/settings.py
 
 CELERY_BROKER_URL = 'redis://localhost:6379/0'
 CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
@@ -208,5 +202,14 @@ CELERY_ACCEPT_CONTENT = ['json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
 CELERY_TIMEZONE = 'UTC'
+
+# Настройка для автоматического запуска задач
+CELERY_BEAT_SCHEDULE = {
+    'check-new-posts-every-hour': {
+        'task': 'apps.instagram_parsing.tasks.check_new_posts',
+        'schedule': crontab(minute=1,),  # Каждые 1 час
+    },
+}
+
 
 CORS_ALLOW_ALL_ORIGINS = True
